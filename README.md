@@ -1,4 +1,4 @@
-﻿# Prepare DOS games for Batocera
+# Prepare DOS games for Batocera
 
 I got my roms from these magnet links:
 
@@ -122,21 +122,19 @@ Refresh Batocera's game list after copying. The `.pc` directory layout is docume
 
 ## Review and fix launchers
 
-The script preserves an existing root-level `dosbox.bat` by default. It can also create a wrapper that calls a packaged `dosbox.bat` inside a subfolder. Otherwise, it guesses among `.exe`, `.com`, and `.bat` files while excluding common setup utilities. Multiple candidates are flagged for review.
+The script preserves an existing root-level `dosbox.bat` by default. It can also create a wrapper that runs a packaged `dosbox.bat` inside a subfolder. Otherwise, it guesses among `.exe`, `.com`, and `.bat` files while excluding common setup utilities. Multiple candidates are flagged for review.
 
 A generated launcher does not guarantee that the game is ready to play. Some games require installation, CD mounting, command-line arguments, or emulator settings.
 
-To correct a launcher, edit `dosbox.bat` in the output game's `.pc` folder. For a game executable in the root, a basic launcher is:
+To correct a launcher, edit `dosbox.bat` in the output game's `.pc` folder. Generated launchers match the root dosbox.bat example: c:, a blank line, and the game executable. They omit @echo off, cd \, call, and exit. For a game executable in the root, a basic launcher is:
 
 ```bat
-@echo off
-C:
-cd \
+c:
+
 GAME.EXE
-exit
 ```
 
-For an executable inside a `GAME` subfolder, add `cd GAME` before `GAME.EXE`. To launch a batch file, use `call START.BAT`. Use the actual filenames from that game. Save launchers as plain ASCII with Windows CRLF line endings.
+For an executable inside a `GAME` subfolder, add `cd GAME` before `GAME.EXE`. To launch a batch file, use `START.BAT` directly. Use the actual filenames from that game. Save launchers as plain ASCII with Windows CRLF line endings.
 
 Paths with long names or unsupported characters are flagged instead of generating a launcher that assumes a DOS short-name alias. Resolve those paths manually for your emulator.
 

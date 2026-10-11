@@ -85,12 +85,11 @@ function Write-DosLauncher([string]$Root, [IO.FileInfo]$Executable) {
             return $false
         }
     }
-    $lines = @('@echo off', 'C:', 'cd \')
+    # Match the root dosbox.bat example: select C:, blank line, launch the game.
+    $lines = @('c:', '')
     $relativeDirectory = [IO.Path]::GetDirectoryName($relative)
     if ($relativeDirectory) { $lines += "cd $relativeDirectory" }
-    if ($Executable.Extension -ieq '.bat') { $lines += "call $($Executable.Name)" }
-    else { $lines += $Executable.Name }
-    $lines += 'exit'
+    $lines += $Executable.Name
     [IO.File]::WriteAllText((Join-Path $Root 'dosbox.bat'),
         ($lines -join [Environment]::NewLine) + [Environment]::NewLine, [Text.Encoding]::ASCII)
     return $true
